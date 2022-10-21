@@ -12,18 +12,22 @@ from matplotlib import pyplot as plt
 
 import walnut_utils as wnut
 
+fs = 15
 dst = '../clean/'
-filesrc = '../clean/2014SBa_R1_T25/diagnostic/'
-anchors0 = np.loadtxt(filesrc+'anchors0.csv', dtype='float', delimiter=',')
-anchors1 = np.loadtxt(filesrc+'anchors1.csv', dtype='float', delimiter=',')
+Anchors1 = []
+for filename in sorted(glob.glob(dst + '*/diagnostic/anchors1.csv')):
+    Anchors1.append(np.sort(np.loadtxt(filename, dtype='float', delimiter=',')))
+anchors1 = np.vstack(Anchors1)
+
+filesrc = dst + '2014SBa_R1_T25/diagnostic/'
 loc_maxa = np.loadtxt(filesrc+'local_maxima.csv', dtype='int', delimiter=',')
 y = np.median(loc_maxa, axis=0)
 anchors = np.median(anchors1, axis = 0)
 
 walnut_batch = sorted(glob.glob('../raw/*/'))
 
-#for bidx in range(len(walnut_batch)):
-for bidx in [4]:
+for bidx in range(len(walnut_batch)):
+#for bidx in [4]:
     walnut_files = sorted(glob.glob(walnut_batch[bidx] + '*.tif'))
     bname = walnut_batch[bidx].split('/')[-2]
     wdst = dst + bname + '/'
@@ -57,7 +61,8 @@ for bidx in [4]:
                 x[i] = j-1+(a*tot-cumul[j-1])/(cumul[j]-cumul[j-1])
             else:
                 x[i] = 0
-        npz = P.Polynomial.fit(x,y,2)
+        npz = P.Polynomial.fit(x,y,1)
+        np.savetxt(wdst + 'normalization/normalization_coefficients' + fname + '.csv', npz.convert().coef, delimiter = ',')
 
         ################################################
 
@@ -70,7 +75,7 @@ for bidx in [4]:
         ax.axvline(y[2], ls='-.', lw=lw, c='g')
         ax.axvline(0, c='gray', lw=1)
         ax.axvline(255, c='gray', lw=1)
-        ax.axvline(75, c='gray', lw=1)
+        ax.axvline(100, c='gray', lw=1)
 
         ax.plot(bins[:-1], np.log(hist0+1), lw=lw, label = 'original')
         ax.plot(bins[:-1], np.log(fhist+1), lw=lw, label = 'filtered')
@@ -111,30 +116,44 @@ for bidx in [4]:
 
         i = 0
         ax[i].imshow(img[ss], cmap='inferno', origin='lower', vmax=255, vmin=0)
-        ax[i].set_title('img')
+        ax[i].set_title('img', fontsize=fs)
         i = 1
         ax[i].imshow(aimg[ss], cmap='inferno', origin='lower', vmax=255, vmin=0)
-        ax[i].set_title('normalized')
+        ax[i].set_title('normalized', fontsize=fs)
         i = 2
         ax[i].imshow(oimg[ss], cmap='inferno', origin='lower', vmax=1, vmin=0)
-        ax[i].set_title('components filled')
+        ax[i].set_title('components filled', fontsize=fs)
         i = 3
         ax[i].imshow(cimg[ss], cmap='inferno', origin='lower', vmax=255, vmin=0)
-        ax[i].set_title('air removed')
+        ax[i].set_title('air removed', fontsize=fs)
 
         fig.tight_layout()
+        fig.suptitle(bname + '/' + fname, fontsize=fs)
         filename = wdst + 'normalization/air_removal_' + fname + '.jpg'
         plt.savefig(filename, dpi=100, format='jpg', bbox_inches = 'tight', pil_kwargs={'optimize':True})
         plt.close()
 
         walnut, cero = wnut.clean_zeroes(cimg)
-        np.savetxt(wdst + 'normalization/clean_zeroes.csv', cero, fmt='%d', delimiter = ',')
+
+        bwalnut = walnut.copy()
+        bwalnut[bwalnut > 0] = 1
+
+        fwalnut = walnut.copy()
+        fwalnut[fwalnut > 0] = 1
+        #fwalnut = wnut.fill_component(fwalnut)
+        fwalnut = ndimage.binary_fill_holes(fwalnut)
+
+        diff = fwalnut - bwalnut
+
+        walnut[diff > 0] = 1
+
+        np.savetxt(wdst + 'normalization/clean_zeroes' + fname + '.csv', cero, fmt='%d', delimiter = ',')
 
         filename = wdst + fname + '.tif'
         tf.imwrite(filename, walnut, photometric='minisblack', compress=3)
 
         snaps = wnut.collapse_dimensions(walnut)
-        wnut.plot_collapse_dimensions(snaps, fname, 'whole walnut', dst=wdst+'normalization/', writefig=True)
+        wnut.plot_collapse_dimensions(snaps, bname+'_'+fname, 'whole walnut', dst=wdst+'normalization/', writefig=True)
 
         snaps = wnut.collapse_dimensions_max(walnut)
-        wnut.plot_collapse_dimensions(snaps, fname, 'walnut shell', dst=wdst+'normalization/', writefig=True)
+        wnut.plot_collapse_dimensions(snaps, bname+'_'+fname, 'walnut shell', dst=wdst+'normalization/', writefig=True)

@@ -31,7 +31,7 @@ def main():
         img = tf.imread(f)
         d,h,w = img.shape
         print(f,w,h,d,args.min_size,img.nbytes//1e6)
-        img = tf.transpose_axes(img, 'YXZ', 'XYZ')
+        img = tf.transpose_axes(img, 'YXZ', 'ZYX')
         d,h,w = img.shape
         aux = 1
         cmap = matplotlib.cm.get_cmap('inferno',stepsize)

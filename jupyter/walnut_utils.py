@@ -24,20 +24,44 @@ def normalize_density(img, npz):
 
     return img
 
-def get_largest_element(comp):
+def get_largest_element(comp, thr=0.1):
+    tot = np.sum(comp > 0)
     labels,num = ndimage.label(comp, structure=ndimage.generate_binary_structure(comp.ndim, 1))
-    print(num,'components')
     hist,bins = np.histogram(labels, bins=num, range=(1,num+1))
     argsort_hist = np.argsort(hist)[::-1]
+
+    where = np.where(hist/tot > thr)[0] + 1
+    print(num,'components\t',len(where),'preserved')
     print(np.sort(hist)[::-1][:20])
 
-    j = 0
-    i = argsort_hist[j]
-    mask = labels==i+1
+    mask = labels == where[0]
+    for w in where[1:]:
+        mask = mask | (labels == w)
     box0 = comp.copy()
     box0[~mask] = 0
 
     return box0
+
+def label_and_rearrange(obinglands):
+    numgeq1 = True
+
+    struc = ndimage.generate_binary_structure(obinglands.ndim, 1)
+
+    labels,num = ndimage.label(obinglands, structure=struc)
+    print(num,'components')
+    if num > 1:
+        hist,bins = np.histogram(labels, bins=num, range=(1,num+1))
+        argsort_hist = np.argsort(hist)[::-1]
+        npz = np.hstack(([0],1+np.argsort(argsort_hist)))
+
+        with np.nditer(labels, flags=['external_loop'], op_flags=['readwrite']) as it:
+            for x in it:
+                x[...] = npz[x]
+    else:
+        numgeq1 = False
+        hist = np.arange(1)
+
+    return labels, hist, numgeq1
 
 def fill_component(comp, x=True, y=True, z=True):
     rcomp = comp.copy()

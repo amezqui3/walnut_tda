@@ -10,8 +10,8 @@ from matplotlib import pyplot as plt
 
 import walnut_utils as wnut
 
-src = '../clean2/'
-dst = '../watershed/'
+src = '../hpcc/clean/'
+dst = '../hpcc/watershed/'
 
 struc1 = ndimage.generate_binary_structure(3, 1)
 struc2 = ndimage.generate_binary_structure(3, 2)
@@ -28,8 +28,8 @@ fs = 15
 
 walnut_batch = sorted(glob.glob( src + '*/' ))
 
-for bidx in range(3,4):#,len(walnut_batch)):
-
+for bidx in range(17,len(walnut_batch)):
+#for bidx in [16]:
     walnut_files = sorted(glob.glob(walnut_batch[bidx] + '*.tif'))
     bname = walnut_batch[bidx].split('/')[-2]
 
@@ -44,7 +44,7 @@ for bidx in range(3,4):#,len(walnut_batch)):
         os.makedirs(wdsts)
     print(wdsts)
 
-    for widx in range(2,len(walnut_files)):
+    for widx in range(len(walnut_files)):
         print(walnut_files[widx])
         img = tf.imread(walnut_files[widx])
 

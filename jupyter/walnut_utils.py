@@ -1,7 +1,6 @@
 import tifffile as tf
 from scipy import ndimage, signal, optimize
 import numpy as np
-import numpy.polynomial.polynomial as P
 import os
 import glob
 

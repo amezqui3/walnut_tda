@@ -40,9 +40,6 @@ for bidx in range(len(walnut_batch)):
 
     for widx in range(len(walnut_files)):
 
-        flipx = np.eye(3)
-        rotX, rotY, rotZ = False, False, False
-
         pa, fi = os.path.split(walnut_files[widx])
         fname = os.path.splitext(fi)[0]
         print(fname)
@@ -90,8 +87,13 @@ for bidx in range(len(walnut_batch)):
         datapoints = datapoints - wmean.reshape(-1,1)
         datapoints *= resol
 
+        fig,ax = wnut.plot_3Dprojections(datapoints, fname + ' original', alpha=0.01, writefig=True, dst=wdst, display=False);
+
         tipvox = tipvox - wmean
         tipvox *= resol
+
+        flipx = np.eye(3)
+        rotX, rotY, rotZ = False, False, False
 
         if tipvox[0] < 0:
             rotX = True
@@ -100,7 +102,6 @@ for bidx in range(len(walnut_batch)):
             tipvox[0] *= -1.
             flipx[0,0] *= -1
 
-        fig,ax = wnut.plot_3Dprojections(datapoints, fname + ' original', alpha=0.01, writefig=True, dst=wdst, display=False);
 
         thetay = np.sign(tipvox[1]) * np.arccos(tipvox[0]/np.sqrt(tipvox[0]**2 + tipvox[2]**2))
         thetaz = np.sign(tipvox[2]) * np.arccos(tipvox[0]/np.sqrt(tipvox[0]**2 + tipvox[1]**2))
@@ -153,7 +154,7 @@ for bidx in range(len(walnut_batch)):
         cval = np.max(np.abs(tcoords))/np.max(sumdist)
 
         sumdist3 = np.hstack((sumdist,sumdist,sumdist))
-        rawpeakidx, _ = signal.find_peaks(sumdist3, distance=len(sumdist)//4)
+        rawpeakidx, _ = signal.find_peaks(sumdist3, distance=300)
         foo = rawpeakidx[(rawpeakidx > len(sumdist)) & (rawpeakidx < 2*len(sumdist))]
         srtpeakidx = foo[np.argsort(sumdist3[foo])[-2:][::-1]] - len(sumdist)
 
@@ -199,7 +200,7 @@ for bidx in range(len(walnut_batch)):
         fig, ax = wnut.plot_3Dprojections(rcoords, fname + '+rotXYZ', alpha=0.01, writefig=True, dst=wdst, display=False);
 
         hull = spatial.ConvexHull(rcoords.T)
-        align = np.vstack((wmean, rotx, roty, rotz, flipx @ rotxyz,
+        align = np.vstack((wmean, rotx, roty, rotz, rotxyz @ flipx,
                            np.array([rotX,rotY,rotZ]).astype(int),
                            tipvox, rtipvox,
                            minis, maxes, maxes - minis,

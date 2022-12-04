@@ -1,14 +1,20 @@
 #! /bin/sh
 
-walnut_id=("2011SBb_R3_T9" "2014SBa_R5_T43" "2014SBa_R5_T90" "2014SBa_R7_T19" \
+walnut_ida=("2011SBb_R3_T9" "2014SBa_R5_T43" "2014SBa_R5_T90" "2014SBa_R7_T19" \
 "201SBa_R5_T55" "2012SB_R11_T29" "2014SBa_R5_T47" "2014SBa_R5_T82" "2014SBa_R5_T91" \
 "2014SBa_R7_T20" "2012SB_R12_T62" "2014SBa_R5_T48" "2014SBa_R5_T92" "2014SBa_R7_T21" \
 "2012SB_R16_T66" "2014SBa_R5_T85" "2014SBa_R7_T23" "2014SBa_R5_T51" "2014SBa_R5_T86" \
 "2014SBa_R6_T48" "2014SBa_R7_T24" "2014SBa_R5_T52" "2014SBa_R5_T87" "2014SBa_R7_T25" \
 "2014SBa_R1_T33" "2014SBa_R5_T53" "2014SBa_R5_T89" "2014SBa_R6_T66" "2014SBa_R7_T26")
 
-for wid in ${walnut_id[@]}
+walnut_idb=("2014SBa_R6_T35" "2014SBa_R5_T9" "2014SBa_R1_T35" "2014SBa_R1_T7" \
+"2012SB_R16_T64" "2014SBa_R6_T12" "2014SBa_R5_T19" "2014SBa_R1_T26" "2014SBa_R1_T23" \
+"2012SB_R16_T58" "2014SBa_R7_T28" "2014SBa_R5_T84" "2014SBa_R5_T21" "2014SBa_R1_T27" \
+"2012SB_R11_T69" "2014SBa_R6_T49" "2014SBa_R1_T6" "2012SB_R12_T57" "2014SBa_R6_T13" \
+"2014SBa_R1_T20" "2014SBa_R1_T18" "2014SBa_R7_T18")
+
+for wid in ${walnut_idb[@]}
 do
-	echo "python3 Code/walnut/03_nut_alignment.py Results/walnut/clean/ Results/walnut/rotated/ "$wid
+	echo "python3 Code/walnut/02_watershed_segmentation.py Results/walnut/clean/ Results/walnut/watershed/ "$wid
 done
 

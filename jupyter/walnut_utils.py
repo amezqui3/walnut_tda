@@ -23,7 +23,7 @@ def normalize_density(img, npz):
 
     return img
 
-def get_largest_element(comp, thr=0.1):
+def get_largest_element(comp, thr=0.1, outlabels=False):
     tot = np.sum(comp > 0)
     labels,num = ndimage.label(comp, structure=ndimage.generate_binary_structure(comp.ndim, 1))
     hist,bins = np.histogram(labels, bins=num, range=(1,num+1))
@@ -38,6 +38,9 @@ def get_largest_element(comp, thr=0.1):
         mask = mask | (labels == w)
     box0 = comp.copy()
     box0[~mask] = 0
+
+    if outlabels:
+        return box0, labels, where
 
     return box0
 

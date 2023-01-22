@@ -66,34 +66,6 @@ for bidx in range(len(walnut_batch)):
 
         ################################################
 
-        fig, ax = plt.subplots(figsize=(14,5))
-        lw = 3
-
-        ax.axhline(0, c='gray', lw=1)
-        ax.axvline(y[0], ls='-.', lw=lw, c='r')
-        ax.axvline(y[1], ls='-.', lw=lw, c='b')
-        ax.axvline(y[2], ls='-.', lw=lw, c='g')
-        ax.axvline(0, c='gray', lw=1)
-        ax.axvline(255, c='gray', lw=1)
-        ax.axvline(100, c='gray', lw=1)
-
-        ax.plot(bins[:-1], np.log(hist0+1), lw=lw, label = 'original')
-        ax.plot(bins[:-1], np.log(fhist+1), lw=lw, label = 'filtered')
-        ax.plot(npz(bins[:-1]), np.log(fhist+1), lw=lw, label = 'adjusted', c='m')
-
-        ax.set_xlabel("Density", fontsize=22)
-        ax.set_ylabel("log(freq+1)", fontsize=22)
-        ax.set_title(bname + ' vs. Reference', fontsize=26)
-        ax.tick_params(labelsize=22)
-        ax.legend(fontsize=24)
-        fig.tight_layout()
-
-        filename = wdst + 'normalization/density_normalizaiton_' + fname + '.jpg'
-        plt.savefig(filename, dpi=100, format='jpg', bbox_inches = 'tight', pil_kwargs={'optimize':True})
-        plt.close()
-
-        ################################################
-
         aimg = img.copy()
         aimg = wnut.normalize_density(aimg, npz)
 

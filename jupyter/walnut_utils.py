@@ -125,7 +125,7 @@ def collapse_dimensions_max(img):
     return snaps
 
 def plot_collapse_dimensions(snaps, bname='bname', tissue='tissue', display=False, writefig=False, dst='./'):
-    fig, ax = plt.subplots(1,len(snaps),figsize=(6*len(snaps),6))
+    fig, ax = plt.subplots(1,len(snaps),figsize=(4*len(snaps),5))
     for i in range(len(snaps)):
         ax[i].imshow(snaps[i], cmap='inferno', origin='lower');
     plt.suptitle(bname + ' ' + tissue + ' collapse', fontsize=20);
@@ -134,8 +134,9 @@ def plot_collapse_dimensions(snaps, bname='bname', tissue='tissue', display=Fals
     if writefig:
         filename = dst + bname + '_' + '_'.join(tissue.split(' ')) + '.jpg'
         plt.savefig(filename, dpi=96, format='jpg', pil_kwargs={'optimize':True}, bbox_inches='tight');
-        if not display:
-            plt.close();
+    if not display:
+        plt.close();
+    return fig,ax
 
 
 ########################################################################

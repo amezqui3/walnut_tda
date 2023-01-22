@@ -124,6 +124,8 @@ for widx in range(len(walnut_files)):
     plt.savefig(filename, dpi=100, format='jpg', bbox_inches = 'tight', pil_kwargs={'optimize':True})
     plt.close()
 
+    ################################################
+
     walnut, cero = wnut.clean_zeroes(cimg)
     np.savetxt(wdst + 'normalization/clean_zeroes' + fname + '.csv', cero, fmt='%d', delimiter = ',')
 

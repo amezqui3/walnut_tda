@@ -7,6 +7,7 @@ import glob
 import warnings
 warnings.filterwarnings( "ignore")
 from matplotlib import pyplot as plt
+from skimage import morphology as morph
 
 import unionfind as UF
 
@@ -387,3 +388,46 @@ def even_space_ell0(N=100, a=2, b=1):
     y = b*np.sin(theta)
 
     return np.vstack((theta, x, y))
+
+########################################################################
+########################################################################
+
+def object_thickness(img, resol=1, PAD=5, NNN=8, K=10, deets=False):
+
+    struc1 = ndimage.generate_binary_structure(img.ndim, 1)
+    adds = K*np.arange(NNN+1)[1:]
+
+    x = img.shape[0]//2
+    Sx = [ np.s_[x-add,:,:] for add in adds][::-1] + [np.s_[x,:,:]] + [ np.s_[x+add,:,:] for add in adds]
+
+    y = img.shape[1]//2
+    Sy = [ np.s_[:,y-add,:] for add in adds][::-1] + [np.s_[:,y,:]] + [ np.s_[:,y+add,:] for add in adds]
+
+    z = img.shape[2]//2
+    Sz = [ np.s_[:,:,z-add] for add in adds][::-1] + [np.s_[:,:,z]] + [ np.s_[:,:,z+add] for add in adds]
+
+    Sxyz = Sx + Sy + Sz
+
+    if PAD > 3:
+        closed = np.pad(img.copy(), PAD)
+        closed = ndimage.binary_dilation(closed, struc1, PAD-3, border_value=0)
+        closed = ndimage.binary_erosion(closed, struc1, 2*(PAD-3), border_value=1)
+        closed = ndimage.binary_dilation(closed, struc1, PAD-3, border_value=0)
+        closed = closed[PAD:-PAD, PAD:-PAD, PAD:-PAD]
+    else:
+        close = img.copy()
+
+    thickslices = np.zeros((len(Sxyz),4))
+
+    for i in range(len(Sxyz)):
+        slc = closed[Sxyz[i]]
+        dist = ndimage.distance_transform_edt(slc)
+        skel = morph.skeletonize(slc)
+        ma = dist[skel]
+        thickslices[i] = np.mean(ma), np.median(ma), np.std(ma, ddof=1), np.var(ma, ddof=1)
+
+    vx = np.asarray([np.mean(thickslices[:,0]), np.mean(thickslices[:,1]), np.median(thickslices[:,0]), np.median(thickslices[:,1])])
+
+    if deets:
+        return 2*vx*resol, thickslices
+    return 2*vx*resol

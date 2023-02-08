@@ -66,10 +66,11 @@ wdstp = wdst + 'protrusion/'
 if not os.path.isdir(wdstp):
     os.makedirs(wdstp)
 
-for widx in range(len(walnut_files)):
+for widx in range(7,len(walnut_files)):
     img = tf.imread(walnut_files[widx])
     pa, fi = os.path.split(walnut_files[widx])
     fname = os.path.splitext(fi)[0]
+    print(fname)
 
     shell= tf.imread(tsrc + bname + '/' + fname + '_shell.tif')
 
@@ -107,6 +108,9 @@ for widx in range(len(walnut_files)):
     test[extra > 0] += 2
 
     ishell = efill*shell
+    if np.sum(ishell > 0) == 0:
+        efill = ndimage.binary_erosion(fshell, struc1, 2*K)
+        ishell = efill*shell
     ishell, labels, where = wnut.get_largest_element(ishell,1e-3, outlabels=True)
     coms = ndimage.center_of_mass(ishell, labels, where)
     coms = np.asarray(coms).T

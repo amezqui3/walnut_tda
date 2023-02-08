@@ -1,5 +1,5 @@
 import tifffile as tf
-from scipy import ndimage, signal, optimize
+from scipy import ndimage, signal, optimize, stats
 import numpy as np
 import os
 import glob
@@ -24,13 +24,16 @@ def normalize_density(img, npz):
 
     return img
 
-def get_largest_element(comp, thr=0.1, outlabels=False):
+def get_largest_element(comp, thr=0.1, minsize=None, outlabels=False):
     tot = np.sum(comp > 0)
     labels,num = ndimage.label(comp, structure=ndimage.generate_binary_structure(comp.ndim, 1))
     hist,bins = np.histogram(labels, bins=num, range=(1,num+1))
     argsort_hist = np.argsort(hist)[::-1]
 
-    where = np.where(hist/tot > thr)[0] + 1
+    if minsize is None:
+        minsize = np.max(hist) + 1
+
+    where = np.where((hist/tot > thr) | (hist > minsize))[0] + 1
     print(num,'components\t',len(where),'preserved')
     print(np.sort(hist)[::-1][:20])
 
@@ -431,3 +434,101 @@ def object_thickness(img, resol=1, PAD=5, NNN=8, K=10, deets=False):
     if deets:
         return 2*vx*resol, thickslices
     return 2*vx*resol
+
+def anova(data, traits_ss, colname):
+    col_names = np.unique(data[colname].values)
+    traits = data.iloc[traits_ss].columns
+    l_anova = [None for i in range(len(col_names))]
+
+    f_oneway = np.column_stack((np.zeros(len(traits)), np.ones(len(traits))))
+    kruskal = np.copy(f_oneway)
+    #alexander = np.copy(f_oneway)
+
+    for j in range(len(traits)):
+        for i in range(len(l_anova)):
+            line = col_names[i]
+            l_anova[i] = data.loc[data[colname] == line, traits[j]].values
+
+        if not np.all([np.all(l_anova[i] == l_anova[i][0]) for i in range(len(l_anova))]):
+
+            foo = stats.f_oneway(*l_anova)
+            f_oneway[j, :] = foo.statistic, foo.pvalue
+
+            foo = stats.kruskal(*l_anova)
+            kruskal[j, :] = foo.statistic, foo.pvalue
+
+            #foo = stats.alexandergovern(*l_anova)
+            #alexander[j, :] = foo.statistic, foo.pvalue
+
+    return f_oneway, kruskal#, alexander
+
+########################################################################
+########################################################################
+
+def fneighborhood(fvox, shape):
+
+    #v000 = vox[0]*shape[1]*shape[2] + vox[1]*shape[2] + vox[2]
+    v000 = fvox
+    v001 = v000 + 1
+    v010 = v000 + shape[2]
+    v100 = v000 + shape[1]*shape[2]
+    v101 = v100 + 1
+    v011 = v010 + 1
+    v110 = v100 + shape[2]
+    v111 = v100 + shape[2] + 1
+
+    return np.asarray([v000, v001, v010, v100, v101, v011, v110, v111], dtype=np.uint64)
+
+def complexify(flat_datapoints, mask, shape):
+    edges = np.empty((3*len(flat_datapoints),2), dtype=mask.dtype)
+    faces = np.empty((3*len(flat_datapoints),4), dtype=mask.dtype)
+    cubes = np.empty((len(flat_datapoints),8), dtype=mask.dtype)
+
+    i = 0
+    for idx in range(len(flat_datapoints)):
+        hood = mask[fneighborhood(flat_datapoints[idx], shape)]
+
+        cubes[idx] = hood;
+
+        edges[i] = hood[0], hood[1];
+        faces[i] = hood[0], hood[1], hood[2], hood[5];
+        i+=1
+        edges[i] = hood[0], hood[2];
+        faces[i] = hood[0], hood[2], hood[3], hood[6];
+        i+=1
+        edges[i] = hood[0], hood[3];
+        faces[i] = hood[0], hood[3], hood[1], hood[4];
+        i+=1
+
+    edges = edges[np.all(edges, axis=1)]
+    faces = faces[np.all(faces, axis=1)]
+    cubes = cubes[np.all(cubes, axis=1)]
+
+    return edges, faces, cubes
+
+def regular_directions(N=50, r=1, dims=3):
+    if dims==2:
+        eq_angles = np.linspace(0, 2*np.pi, num=N, endpoint=False)
+        return np.column_stack((np.cos(eq_angles), np.sin(eq_angles)))
+
+    if dims==3:
+        dirs = np.zeros((N, 3), dtype=np.float64)
+        i = 0
+        a = 4*np.pi*r**2/N
+        d = np.sqrt(a)
+        Mtheta = np.round(np.pi/d)
+        dtheta = np.pi/Mtheta
+        dphi = a/dtheta
+        for m in range(int(Mtheta)):
+            theta = np.pi*(m + 0.5)/Mtheta
+            Mphi = np.round(2*np.pi*np.sin(theta)/dphi)
+            for n in range(int(Mphi)):
+                phi = 2*np.pi*n/Mphi
+                # sometimes we get an error due to i == N for some choices of N
+                if i < N:
+                    dirs[i,:] = r*np.sin(theta)*np.cos(phi), r*np.sin(theta)*np.sin(phi), r*np.cos(theta)
+                    i += 1
+
+        return dirs
+    else:
+        print("Function implemented only for 2 and 3 dimensions")

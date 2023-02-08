@@ -46,14 +46,11 @@ wdst = dst + bname + '/'
 if not os.path.isdir(wdst):
     os.makedirs(wdst)
 
-wdstp = wdst + 'protrusion/'
-if not os.path.isdir(wdstp):
-    os.makedirs(wdstp)
-
 for widx in range(len(walnut_files)):
     img = tf.imread(walnut_files[widx])
     pa, fi = os.path.split(walnut_files[widx])
     fname = os.path.splitext(fi)[0]
+    print(fname)
 
     tissuefiles = tsrc + bname + '/' + fname + '_'
     air  = tf.imread(tissuefiles + 'air.tif')

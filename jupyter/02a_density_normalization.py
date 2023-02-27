@@ -79,7 +79,7 @@ for widx in range(len(walnut_files)):
     npz = P.Polynomial.fit(x,y,1)
     np.savetxt(wdst + 'normalization/normalization_coefficients' + fname + '.csv', npz.convert().coef, delimiter = ',')
 
-        ################################################
+    ################################################
 
     aimg = img.copy()
     aimg = wnut.normalize_density(aimg, npz)

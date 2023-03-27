@@ -27,7 +27,8 @@ do
 	#echo "python3 Code/walnut/04_interior_shell.py Results/walnut/ Results/walnut/watershed/ "$wid
 #	echo "python3 Code/walnut/05_traditional_phenotyping.py Results/walnut/ Results/walnut/traditional/ "$wid
 	#echo "python3 Code/walnut/06_ect_on_walnut.py Results/walnut/ Results/walnut/topology/ "$wid
-	echo "python3 Code/walnut/07_ect_on_kernel.py Results/walnut/ Results/walnut/topology/ "$wid
+	#echo "python3 Code/walnut/07_ect_on_kernel.py Results/walnut/ Results/walnut/topology/ "$wid
+	echo "python3 Code/walnut/08_kernel_phenotyping.py Results/walnut/ Results/walnut/kernel/ "$wid
 	
 done
 

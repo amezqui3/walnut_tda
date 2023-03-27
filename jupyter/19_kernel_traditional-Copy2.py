@@ -1,5 +1,5 @@
 import tifffile as tf
-from scipy import ndimage, signal
+from scipy import ndimage, signal, spatial
 
 import numpy as np
 import pandas as pd
@@ -11,6 +11,8 @@ import warnings
 warnings.filterwarnings( "ignore")
 from matplotlib import pyplot as plt
 import argparse
+from shapely.geometry import LineString, Polygon
+from shapely.ops import polylabel
 
 ang = np.linspace(0, 2*np.pi, 200, endpoint=True)
 circle = np.vstack((np.sin(ang), np.cos(ang)))
@@ -60,8 +62,10 @@ for widx in range(len(walnut_files)):
 
     bimg = meat.copy().astype(int)
     bimg[bimg > 0]  = 1
+    kervol = np.sum(bimg)*(resol**3)
     border = ndimage.convolve(bimg, mborder, mode='constant', cval=0)
     border[border < 0] = 0
+    kerarea = np.sum(border) * (resol ** 2)
     border[border > 0] = 1
 
     filename = rsrc + bname + '/' + fname + '_rotation.csv'
@@ -80,6 +84,9 @@ for widx in range(len(walnut_files)):
     datapoints *= resol
 
     mcoords = rotxyz @ datapoints
+    khull = spatial.ConvexHull(mcoords.T)
+    charearatio = kerarea/khull.area
+    chivolratio = khull.volume/kervol
 
     kk = 0
     phalfx = mcoords[:, (mcoords[0] >  kk)]
@@ -146,11 +153,17 @@ for widx in range(len(walnut_files)):
     fhist = ndimage.median_filter(hist, size=5, mode='constant', cval=0)
     mhistc = ndimage.minimum_filter1d(fhist, size=3, mode='constant', cval=0)
 
-    peaks, _ = signal.find_peaks(hist0, height=np.max(hist0)*.33, wlen=50, distance=125)
+    peaks, _ = signal.find_peaks(mhistc, height=np.max(mhistc)*.33, prominence=np.max(mhistc)*.33, wlen=50)
+    if len(peaks) < 2:
+        peaks, _ = signal.find_peaks(hist0, height=np.max(hist0)*.33, prominence=np.max(hist0)*.33, wlen=50)
     zeros = bins[peaks+1]
     htop = np.max(zeros)
     foo = np.argmin(np.abs(zeros))
     hbot = zeros[foo]
+    if hbot < -4:
+        hbot = 0
+    if htop < hbot + 7:
+        htop = bins[np.nonzero(mhistc)[0][-1]]
     hlength = htop - hbot
 
     # lower arch height
@@ -159,30 +172,70 @@ for widx in range(len(walnut_files)):
     alength = atop - abot
     print(atop, abot, alength, sep='\t')
 
-
-    nhalfx = mcoords[:, mcoords[0] < np.mean([atop,abot])]
-    nhalfx = nhalfx - np.mean(nhalfx, axis=1).reshape(-1,1)
-
-    data = nhalfx[1:]
-    angles = np.angle(data[0] + data[1]*1j)
-    nvecs = data/np.linalg.norm(data.T, axis=1)
-
+    linspace = np.linspace(atop-1, abot+1, 25)
+    eps = (linspace[0] - linspace[1])/2
     granularity = 100
     bins = np.linspace(-np.pi, np.pi, granularity+1)
-    binning = np.digitize(angles, bins)
 
-    trace = np.zeros((granularity, 2))
-    for i in range(granularity):
-        if np.sum(binning == i + 1) > 1:
-            subdata = data[:, binning == i + 1]
-            arg = np.argmin(np.sqrt(np.sum(subdata**2, axis=0)))
-            trace[i] = subdata[:, arg]
-    trace = trace[np.all(trace, axis=1),:].T
-    radii = np.sqrt(np.sum(trace**2, axis=0))
-    mr = np.quantile(radii, 0.5)
-    mc = np.mean(trace, axis=1)
-    print(mr)
+    surface = np.zeros(len(linspace))
+    volume = np.zeros_like(surface)
+    distantpoles = np.zeros_like(volume)
+    distantpolev = np.zeros_like(volume)
 
+    fs = 14
+    fig, ax = plt.subplots(5,5,figsize=(16,16), sharex=True, sharey=True, facecolor='snow')
+    ax = np.atleast_1d(ax).ravel(); i = 0
+
+    for i in range(len(linspace)):
+        kk = linspace[i]
+        nhalfx = mcoords[:, (mcoords[0] < kk + eps) & (mcoords[0] > kk - eps)]
+        #nhalfx = nhalfx - np.mean(nhalfx, axis=1).reshape(-1,1)
+
+        data = nhalfx[1:]
+        angles = np.angle(data[0] + data[1]*1j)
+
+        binning = np.digitize(angles, bins)
+
+        trace = np.zeros((granularity, 2))
+        for j in range(granularity):
+            if np.sum(binning == j + 1) > 1:
+                subdata = data[:, binning == j + 1]
+                arg = np.argmin(np.sqrt(np.sum(subdata**2, axis=0)))
+                trace[j] = subdata[:, arg]
+        trace = trace[np.all(trace, axis=1),:].T
+        radii = np.sqrt(np.sum(trace**2, axis=0))
+        mr = np.quantile(radii, 0.8)
+
+        trace = trace[:, radii < mr]
+        polygon = Polygon(zip(*trace))
+        center = polylabel(polygon, tolerance=1e-1)
+        rr = np.min(np.sqrt((trace[0] - center.x)**2 + (trace[1] - center.y)**2))
+
+        surface[i] = polygon.length*eps
+        volume[i] = polygon.area*eps
+        distantpoles[i] = 4*np.pi*rr**2
+        distantpolev[i] = 4/3*np.pi*rr**3
+
+        ax[i].set_title('A: {:.1f}, r: {:.1f}'.format(polygon.area, rr), fontsize=fs)
+        ax[i].scatter(nhalfx[1], nhalfx[2], s=0.5, color='y', alpha=1, marker='.');
+        ax[i].plot(trace[0], trace[1], c='r', lw=2)
+        ax[i].plot([trace[0,0],trace[0,-1]], [trace[1,0],trace[1,-1]], c='r', lw=2)
+        ax[i].scatter([center.x], [center.y], s=50, c='k')
+        ax[i].plot(rr*circle[0] + center.x, rr*circle[1]+center.y, lw=2, c='k', zorder=5)
+
+    for i in range(len(ax)):
+        ax[i].set_aspect('equal');
+        ax[i].axvline(0, c='g',alpha=0.75)
+        ax[i].axhline(0,c='g',alpha=0.75);
+
+    fig.suptitle(fname, fontsize=fs+10)
+    fig.tight_layout();
+    filename = wdst + fname + '_cavity.jpg'
+    print(filename)
+    plt.savefig(filename, dpi=96, format='jpg', bbox_inches = 'tight', pil_kwargs={'optimize':True})
+
+    vol = np.sum(volume)
+    suf = np.sum(surface)
     fs = 30
 
     fig, ax = plt.subplots(2,4,figsize=(20,10), sharex=False, sharey=False, facecolor='snow')
@@ -208,24 +261,21 @@ for widx in range(len(walnut_files)):
     ######
 
     ax[i].scatter(nhalfx[1], nhalfx[2], s=.1, color='y', alpha=.2, marker='.')
-    ax[i].scatter(12*nvecs[0], 12*nvecs[1], s=.1, zorder=3, c='b', marker='.', alpha=.1)
     ax[i].scatter(trace[0], trace[1], s=10, zorder=4, c='r', marker='*')
-    ax[i].plot(mr*circle[0] + mc[0], mr*circle[1]+mc[1], lw=4, c='k', zorder=5)
-    ax[i].set_title('d: {:.2f} mm'.format(mr*2), fontsize=fs)
+    ax[i].set_title('X: {:.2f}'.format(vol/suf), fontsize=fs)
     i += 1
     ax[i].scatter(nhalfz[1], nhalfz[0], s=.1, color='y', alpha=.2, marker='.')
     ax[i].axhline(np.mean([atop,abot]), c='b', lw=5, ls='--', alpha=.5)
-    ax[i].set_title('S: {:.0f} mm2'.format(2*np.pi*mr*(mr + alength)), fontsize=fs)
+    ax[i].set_title('S: {:.0f} mm2'.format(suf), fontsize=fs)
     i += 1
     ax[i].scatter(nhalfy[2], nhalfy[0], s=.1, color='y', alpha=.2, marker='.')
     ax[i].axhline(np.mean([atop,abot]), c='b', lw=5, ls='--', alpha=.5)
-    ax[i].set_title('V: {:.0f} mm3'.format(np.pi*mr**2*alength), fontsize=fs)
+    ax[i].set_title('V: {:.0f} mm3'.format(vol), fontsize=fs)
     i += 1
     ax[i].scatter(halfz[1], halfz[0], s=.1, color='y', alpha=.2, marker='.')
     ax[i].plot([2,2], [htop, hbot], lw=7, c='r', alpha=.5)
     ax[i].plot([-2,-2], [atop, abot], lw=7, c='b', alpha=0.5)
     ax[i].set_title('blue: {:.2f} mm'.format(alength), fontsize=fs)
-    i += 1
 
     for i in range(len(ax)):
         ax[i].set_aspect('equal', 'datalim');
@@ -237,3 +287,8 @@ for widx in range(len(walnut_files)):
     print(filename)
     plt.savefig(filename, dpi=96, format='jpg', bbox_inches = 'tight', pil_kwargs={'optimize':True})
 
+    kerpheno = [kerarea, kervol, charearatio, chivolratio, krumbein,
+            corey, sneed, janke, c/a, suf, vol, hlength, alength]
+    filename = wdst + fname + '_kernel.csv'
+    foo = pd.DataFrame([bname, fname.split('_')[-1], *kerpheno]).T
+    foo.to_csv(filename, header=False, index=False)

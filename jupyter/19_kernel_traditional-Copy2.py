@@ -189,39 +189,43 @@ for widx in range(len(walnut_files)):
     for i in range(len(linspace)):
         kk = linspace[i]
         nhalfx = mcoords[:, (mcoords[0] < kk + eps) & (mcoords[0] > kk - eps)]
-        #nhalfx = nhalfx - np.mean(nhalfx, axis=1).reshape(-1,1)
 
-        data = nhalfx[1:]
-        angles = np.angle(data[0] + data[1]*1j)
+        if nhalfx.shape[1] > 10:
 
-        binning = np.digitize(angles, bins)
+            data = nhalfx[1:]
+            angles = np.angle(data[0] + data[1]*1j)
 
-        trace = np.zeros((granularity, 2))
-        for j in range(granularity):
-            if np.sum(binning == j + 1) > 1:
-                subdata = data[:, binning == j + 1]
-                arg = np.argmin(np.sqrt(np.sum(subdata**2, axis=0)))
-                trace[j] = subdata[:, arg]
-        trace = trace[np.all(trace, axis=1),:].T
-        radii = np.sqrt(np.sum(trace**2, axis=0))
-        mr = np.quantile(radii, 0.8)
+            binning = np.digitize(angles, bins)
 
-        trace = trace[:, radii < mr]
-        polygon = Polygon(zip(*trace))
-        center = polylabel(polygon, tolerance=1e-1)
-        rr = np.min(np.sqrt((trace[0] - center.x)**2 + (trace[1] - center.y)**2))
+            trace = np.zeros((granularity, 2))
+            for j in range(granularity):
+                if np.sum(binning == j + 1) > 1:
+                    subdata = data[:, binning == j + 1]
+                    arg = np.argmin(np.sqrt(np.sum(subdata**2, axis=0)))
+                    trace[j] = subdata[:, arg]
+            trace = trace[np.all(trace, axis=1),:].T
+            radii = np.sqrt(np.sum(trace**2, axis=0))
+            mr = np.quantile(radii, 0.8)
 
-        surface[i] = polygon.length*eps
-        volume[i] = polygon.area*eps
-        distantpoles[i] = 4*np.pi*rr**2
-        distantpolev[i] = 4/3*np.pi*rr**3
+            trace = trace[:, radii < mr]
+            polygon = Polygon(zip(*trace))
+            if not polygon.is_valid:
+                polygon = polygon.buffer(0)
+            if polygon.geom_type == 'Polygon':
+                center = polylabel(polygon, tolerance=1e-1)
+            rr = np.min(np.sqrt((trace[0] - center.x)**2 + (trace[1] - center.y)**2))
 
-        ax[i].set_title('A: {:.1f}, r: {:.1f}'.format(polygon.area, rr), fontsize=fs)
-        ax[i].scatter(nhalfx[1], nhalfx[2], s=0.5, color='y', alpha=1, marker='.');
-        ax[i].plot(trace[0], trace[1], c='r', lw=2)
-        ax[i].plot([trace[0,0],trace[0,-1]], [trace[1,0],trace[1,-1]], c='r', lw=2)
-        ax[i].scatter([center.x], [center.y], s=50, c='k')
-        ax[i].plot(rr*circle[0] + center.x, rr*circle[1]+center.y, lw=2, c='k', zorder=5)
+            surface[i] = polygon.length*eps
+            volume[i] = polygon.area*eps
+            distantpoles[i] = 4*np.pi*rr**2
+            distantpolev[i] = 4/3*np.pi*rr**3
+
+            ax[i].set_title('A: {:.1f}, r: {:.1f}'.format(polygon.area, rr), fontsize=fs)
+            ax[i].scatter(nhalfx[1], nhalfx[2], s=0.5, color='y', alpha=1, marker='.');
+            ax[i].plot(trace[0], trace[1], c='r', lw=2)
+            ax[i].plot([trace[0,0],trace[0,-1]], [trace[1,0],trace[1,-1]], c='r', lw=2)
+            ax[i].scatter([center.x], [center.y], s=50, c='k')
+            ax[i].plot(rr*circle[0] + center.x, rr*circle[1]+center.y, lw=2, c='k', zorder=5)
 
     for i in range(len(ax)):
         ax[i].set_aspect('equal');
@@ -246,11 +250,11 @@ for widx in range(len(walnut_files)):
     i += 1
     ax[i].scatter(phalfz[1], phalfz[0], s=.1, color='y', alpha=.2, marker='.')
     ax[i].axhline(np.mean([atop,abot]), c='b', lw=5, ls='--', alpha=.5)
-    ax[i].set_title('Equancy: {:.2f}'.format(c/a), fontsize=fs)
+    ax[i].set_title('SR: {:.2f}%'.format(100*suf/kerarea), fontsize=fs)
     i += 1
     ax[i].scatter(phalfy[2], phalfy[0], s=.1, color='y', alpha=.2, marker='.')
     ax[i].axhline(np.mean([atop,abot]), c='b', lw=5, ls='--', alpha=.5)
-    ax[i].set_title('Janke: {:.2f}'.format(janke), fontsize=fs)
+    ax[i].set_title('VR: {:.2f}%'.format(100*vol/khull.volume), fontsize=fs)
     i += 1
     ax[i].scatter(halfy[2], halfy[0], s=.1, color='y', alpha=.2, marker='.')
     ax[i].plot([2,2], [htop, hbot], lw=7, c='r', alpha=.5)
@@ -261,7 +265,7 @@ for widx in range(len(walnut_files)):
     ######
 
     ax[i].scatter(nhalfx[1], nhalfx[2], s=.1, color='y', alpha=.2, marker='.')
-    ax[i].scatter(trace[0], trace[1], s=10, zorder=4, c='r', marker='*')
+    #ax[i].scatter(trace[0], trace[1], s=10, zorder=4, c='r', marker='*')
     ax[i].set_title('X: {:.2f}'.format(vol/suf), fontsize=fs)
     i += 1
     ax[i].scatter(nhalfz[1], nhalfz[0], s=.1, color='y', alpha=.2, marker='.')

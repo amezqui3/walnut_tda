@@ -395,7 +395,7 @@ def even_space_ell0(N=100, a=2, b=1):
 ########################################################################
 ########################################################################
 
-def object_thickness(img, resol=1, PAD=5, NNN=8, K=10, deets=False):
+def object_thickness(img, resol=1, PAD=5, NNN=4, K=5, deets=False):
 
     struc1 = ndimage.generate_binary_structure(img.ndim, 1)
     adds = K*np.arange(NNN+1)[1:]

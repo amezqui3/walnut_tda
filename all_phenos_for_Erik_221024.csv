@@ -1,4 +1,4 @@
-UCACCSD,YR,LOCATE,ROW,TREE,ShellIntegrity,ShellTexture,ShellColor,SEAL,ShellStrength,ShellThickness,PackingTissue,KernelFill,%TipShrivel,%MinorShrivel,%MajorShrivel,Plumpness,EaseOfRemoval,PercentKernel,%Blank
+UCACCSD,YR,LOCATE,ROW,TREE,ShellIntegrity,ShellTexture,ShellColor,SEAL,ShellStrength,ShellThickness,PackingTissue,KernelFill,TipShrivel,MinorShrivel,MajorShrivel,Plumpness,EaseOfRemoval,PercentKernel,Blank
 06-013-20,2017,2008SB,1,32,7,5,7,NA,7,1.4,6,NA,0,16.66666667,50,4,6,42.0683249,40
 06-005-27,2017,2008SB,4,13,7,4,3,6,6,1.5,6,5,0,0,0,4,6,48.38931245,0
 06-005-27,2018,2008SB,4,13,7,4,4,5,6,1.3,6,5,0,0,0,3,6,45.12994025,0

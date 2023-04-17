@@ -1,66 +1,64 @@
-,col_labels,col_units
-0,UCACCSD,
-1,Batch Name,
-2,Scan Name,
-3,Nut Length, [mm]
-4,Nut Height, [mm]
-5,Nut Width, [mm]
-6,Nut Volume, [mm$^3$]
-7,Nut VA3D,
-8,Nut Feret Ratio,
-9,Nut Surface Area, [mm$^2$]
-10,Nut Sphericity,
-11,Nut Convex Surface Area, [mm$^2$]
-12,Nut Convex Volume, [mm$^3$]
-13,Nut Ratio Convex Area, [%]
-14,Nut Ratio Convex Volume, [%]
-15,Krumbein Index,
-16,Sneed Index,
-17,Air Volume, [mm$^3$]
-18,Kernel Volume, [mm$^3$]
-19,Shell Volume, [mm$^3$]
-20,Packing Volume, [mm$^3$]
-21,Air Ratio, [%]
-22,Kernel Ratio, [%]
-23,Shell Ratio, [%]
-24,Packing Ratio, [%]
-25,Shell Rugosity,
-26,Shell Thickness, [mm]
-27,External Shell Ratio, [%]
-28,Protruding Shell Ratio, [%]
-29,External Shell Volume, [mm$^3$]
-30,Protruding Shell Volume, [mm$^3$]
-31,Kernel Length, [mm]
-32,Kernel Height, [mm]
-33,Kernel Width, [mm]
-34,Kernel Surface Area, [mm$^2$]
-35,Kernel Convex Volume, [mm$^3$]
-36,Kernel Convex Area, [mm$^2$]
-37,Kernel Ratio Convex Area, [%]
-38,Kernel Ratio Convex Volume, [%]
-39,Kernel Cavity Area, [mm$^2$]
-40,Kernel Cavity Volume, [mm$^3$]
-41,Kernel Arc Height, [mm]
-42,Kernel Cavity Height, [mm]
-43,Kernel Sphericity,
-44,Kernel Ratio Cavity Area, [%]
-45,Kernel Ratio Cavity Volume, [%]
-46,Density Kernel vs Shell, [%]
-47,Density Packing vs Shell, [%]
-48,Density Packing vs Kernel, [%]
-49,Kernel Feret Ratio,
-50,Shell Integrity,
-51,Shell Texture,
-52,Shell Color,
-53,Seal,
-54,Shell Strength,
-55,ShellThickness,
-56,Packing Tissue,
-57,Kernel Fill, [%]
-58,Tip Shrivel, [%]
-59,Minor Shrivel, [%]
-60,Major Shrivel, [%]
-61,Plumpness,
-62,Ease Of Removal,
-63,Percent Kernel, [%]
-64,Blank, [%]
+col_labels,col_units
+UCACCSD,
+Batch Name,
+Scan Name,
+Nut Length, [mm]
+Nut Height, [mm]
+Nut Width, [mm]
+Nut Volume, [mm$^3$]
+Nut VA3D,
+Nut Feret Ratio,
+Nut Surface Area, [mm$^2$]
+Nut Sphericity,
+Nut Convex Surface Area, [mm$^2$]
+Nut Convex Volume, [mm$^3$]
+Nut Ratio Convex Area, [%]
+Nut Ratio Convex Volume, [%]
+Krumbein Index,
+Sneed Index,
+Air Volume, [mm$^3$]
+Kernel Volume, [mm$^3$]
+Shell Volume, [mm$^3$]
+Packing Volume, [mm$^3$]
+Air Ratio, [%]
+Kernel Ratio, [%]
+Shell Ratio, [%]
+Packing Ratio, [%]
+Shell Rugosity,
+Shell Thickness, [mm]
+Protruding Shell Ratio, [%]
+Protruding Shell Volume, [mm$^3$]
+Kernel Length, [mm]
+Kernel Height, [mm]
+Kernel Width, [mm]
+Kernel Surface Area, [mm$^2$]
+Kernel Convex Volume, [mm$^3$]
+Kernel Convex Area, [mm$^2$]
+Kernel Ratio Convex Area, [%]
+Kernel Ratio Convex Volume, [%]
+Kernel Cavity Area, [mm$^2$]
+Kernel Cavity Volume, [mm$^3$]
+Kernel Arc Height, [mm]
+Kernel Cavity Height, [mm]
+Kernel Sphericity,
+Kernel Ratio Cavity Area, [%]
+Kernel Ratio Cavity Volume, [%]
+Density Kernel vs Shell, [%]
+Density Packing vs Shell, [%]
+Density Packing vs Kernel, [%]
+Kernel Feret Ratio,
+Shell Integrity,
+Shell Texture,
+Shell Color,
+Seal,
+Shell Strength,
+ShellThickness,
+Packing Tissue,
+Kernel Fill, [%]
+Tip Shrivel, [%]
+Minor Shrivel, [%]
+Major Shrivel, [%]
+Plumpness,
+Ease Of Removal,
+Percent Kernel, [%]
+Blank, [%]

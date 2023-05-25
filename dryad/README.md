@@ -1,4 +1,4 @@
-# X-Ray CT scans of barley panicles and their individual seeds from the Composite Cross II experiment
+# The shape of kernels and cracks, in a nutshell
 
 ## General information
 
@@ -6,20 +6,11 @@
 
 - **Erik J. Amézquita**, _Michigan State University_
 - **Michelle Quigley**, _Michigan State University_
-- **Tim Ophelders**, _TU Eindhoven_
-- **Jacob B. Landis**, _Cornell University_
-- **Daniel Koenig**, _University of California Riverside_
+- **Patrick J. Brown**, _University of California Davis_
 - **Elizabeth Munch**, _Michigan State University_
 - **Daniel H. Chitwood**, _Michigan State University_
 
 ### To whom correspondence should be addressed:
-
-**Erik J. Amézquita**
-428 S Shaw Ln
-Engineering Building Rm 1515
-East Lansing, MI 48824
-USA
-amezqui3@msu.edu
 
 **Daniel H. Chitwood**
 1066 Bogue St
@@ -30,21 +21,21 @@ chitwoo9@msu.edu
 
 ### Date and geographic location of data collection
 
-In November of 2016, seeds from each accession were stratified at 4C on wet paper towels for a week, and germinated on the bench at room temperature at University of California, Riverside. Four day old seedlings were transferred into pots in triplicate and arranged in a completely randomized design in a greenhouse. Day length was extended throughout the experiment using artificial lighting ---minimum 16h light / 8h dark. After the plants reached maturity and dried, a single spike was collected from each replicate for scanning at Michigan State University throughout Fall 2018.
+Data collected in December 2019 at Michigan State University. Walnut samples provided by the [Walnut Improvement Program](https://fruitsandnuts.ucdavis.edu/collaborators/california-walnut-board/reports) at University of California Davis
 
 ### Keywords
 
-- Barley (Hordeum vulgare)
-- inflorescence
+- Persian Walnut (Juglans regia)
+- Walnut
 - X-ray computed tomography (CT)
 - Plant morphology
 - 3D morphology
 
 ### Related content
 
-- Amézquita EJ, Quigley M, Ophelders T, Landis JB, Koenig D, Munch E, Chitwood DH (2021) "Measuring hidden phenotype: Quantifying the shape of barley seeds using the Euler Characteristic Transform" [Preprint DOI](https://doi.org/10.1101/2021.03.27.437348). To appear in _inSilico Plants_.
+- Amézquita EJ, Quigley M, Brown PJ, Munch E, Chitwood DH "The shape of kernels and cracks, in a nutshell" In preparation at the time of writing this README.
 
-- [Demeter scripts](https://github.com/amezqui3/demeter)
+- [Walnut scripts](https://github.com/amezqui3/walnut_tda)
 
 ### License
 
@@ -55,7 +46,7 @@ Public Domain Dedication
 
 ### Acknowledgements
 
-DC is supported by the USDA National Institute of Food and Agriculture, and by Michigan State University AgBioResearch. The work of EM is supported in part by the National Science Foundation through grants CCF-1907591 and CCF-2106578. JL was supported by the NSF Plant Genome Postdoctoral Fellowship 1711807. DK is supported by an award from the National Science Foundation Plant Genome Research Program (IOS-2046256) and funding from the USDA NIFA (CA-R-BPS-5154-H).
+Daniel Chitwood is supported by the USDA National Institute of Food and Agriculture, and by Michigan State University AgBioResearch. The work of Elizabeth Munch is supported in part by the National Science Foundation through grants CCF-1907591, CCF-2106578, and CCF-2142713.
 
 =========
 
@@ -63,26 +54,26 @@ DC is supported by the USDA National Institute of Food and Agriculture, and by M
 
 ### Overview
 
-We selected 28 barley accessions with diverse spike morphologies and geographical origins for our analysis ([Harlan and Martini 1929, 1936, 1940](https://doi.org/10.2134/agronj1929.00021962002100040014x)). In November of 2016, seeds from each accession were stratified at 4C on wet paper towels for a week, and germinated on the bench at room temperature. Four day old seedlings were transferred into pots in triplicate and arranged in a completely randomized design in a greenhouse. Day length was extended throughout the experiment using artificial lighting ---minimum 16h light / 8h dark. After the plants reached maturity and dried, a single spike was collected from each replicate for scanning at Michigan State University.
-The scans were produced using the North Star Imaging X3000 system and the included efX software, with 720 projections per scan, with 3 frames averaged per projection. The data was obtained in continuous mode. The X‐ray source was set to a voltage of 75 kV, current of 100 &mu;A, and focal spot size of 7.5&mu;m. The 3D reconstruction of the spikes was computed with the efX-CT software, obtaining a final voxel size of 127 microns. The intensity values for all raw reconstructions was standardized as a first step to guarantee that the air and the barley material had the same density values across all scans. Next, the air and debris were thresholded out, and awns digitally.
-Finally, the seed coat of the caryopses was digitally removed, leaving only the embryo and endosperm due to their high water content. We did not have enough resolution in the raw scans to distinguish clearly the endosperm from the embryo. Hereafter, we will refer to these embryo-endosperm unions simply as seeds. Due to the large volume of data, we used an in-house scipy-based python script to automate the image processing pipeline for all panicles and grains.
+We explore the shape of walnut shells and kernels. Here, we study the shape of walnut fruits based on the X-ray CT 3D reconstruction of 1264 different samples comprising 150 accessions maintained by the Walnut Improvement Program at the University of California Davis. We exploit the nondestructiveness of X-rays to digitally segment and measure the 4 main tissues of interest for each walnut, namely shell, kernel, packing tissue, and sealed air. From these we extract a total of 38 size- and shape-specific descriptors, many of them unexplored in the current literature. We focus on several allometric relationships of interest, from which we draw theoretical upper and lower bounds of possible walnut and kernel sizes. We then study correlations and variations of these morphological descriptors with qualitative data corresponding to traits of commercial interest like ease of kernel removal and shell strength.
+
+All plant materials represent walnut breeding lines, germplasm, and cultivars maintained by the Walnut Improvement Program at the University of California, Davis. A total of 150 walnuts accessions were harvested into mesh bags at hull split, oven-dried overnight at 95F, and then air-dried for several weeks before moving into cold storage at 35F. 5 to 16 individuals were selected for each accession, for a total of 1301 individual walnuts to be scanned at Michigan State University (Table S1). The walnuts were scanned in 171 batches. The scans were produced using the the North Star X3000 system and the included efX-DR software. The X-ray source was set at 75~kV and 100~\micro{A}, with 720 projections per scan, at 3 frames per second and with 3 frames averaged per projection. The data was obtained in continuous mode. The 3D X-ray CT reconstruction was computed with the efX-CT software, obtaining voxel-based images with voxel size of 75.9~{\micro}m.
 
 ### File description
 
-The whole dataset is split into four (4) clusters. Read the individual README files within each cluster, and see Amézquita et al (2021) for more information.
+The whole dataset is split into three (3) folders, plus additional metadata in CSV format. Read the individual README files within each folder for more details, and see Amézquita _et al._ (forthcoming) for more information.
 
-- `demeter`: collection of in-house python-based and R-based scripts to process the images, and later compute tradtional and topological shape descriptors. Tutorials on how to use the different functions are provided as commented jupyter notebooks. Created mainly spring 
+- `merged`: Collection of summaries in CSV format. These summaries include the volume of all the main tissues of all citrus fruit, ellipsoid semi-axes lengths that model the overal fruit shape, fruit sphericity for all samples, among other measurments.
 
-- `dimension_reduction`: collection of CSV files with the topological shape descriptors for each of the 3121 founder seeds. These descriptors have been reduced in dimension using independently [KPCA](http://dx.doi.org/10.1162/089976698300017467) and [UMAP](http://arxiv.org/abs/1802.03426).
+- `oil`: Collection of 8-bit TIFF files containing all the segmented oil glands for each citrus. Additional numbers are extracted related to the oil glands. Based on the oil gland centers, we compute the ellipsoid surface that approximates the best the overall fruit shape. Parameters of this best-fit ellipsoid are provided. See the overview section above for more details.
 
-- `shape_descriptors`: collection of CSV files with the tradtional and topological shape descriptors for all the seeds. For ease of computation, part of the information is redundant. Shape descriptors are provided as CSVs for the 3121 founder seeds and for the 37 881 total seed collection.
+- `tissue`: Separate 8-bit TIFF files for separate tissues. All images have the same shape as the original whole fruit image. These are central column, endocarp, rind, and exocarp for each fruit. A rotation matrix to align the fruit upright is provided.
 
-- `xray_ct_scans`: 774 individual barley panicle and their corresponding 37 881 clean, individual seeds. All the scans are provided as single 3D 8-bit TIFF files. Three raw X-ray CT scans containing 4 barley panicles each are included as well.
+- `CRC_citrus_scan_technique.csv`: CSV with resolution of the scans.
 
-- `corrected_metadata.csv`: CSV with scanning information of the 774 barley panicles as part of 224 raw scans.
+- `CRC_citrus_scanned.csv`: Metadata provided by the Walnut Improvement Program at the University of California Davis. 
 
-- `LICENSE`: raw text file with Open Data Commons Attribution License (ODC-By) details
+- `LICENSE`: raw text file with CC0 License details
 
-- `LICENSE_summary`: raw text with ODC-By human-readable summary.
+- `LICENSE_summary`: raw text with CC0 human-readable summary.
 
 - `README.md`: This file. Markdown format. Raw text.

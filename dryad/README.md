@@ -60,20 +60,43 @@ All plant materials represent walnut breeding lines, germplasm, and cultivars ma
 
 ### File description
 
-The whole dataset is split into three (3) folders, plus additional metadata in CSV format. Read the individual README files within each folder for more details, and see Amézquita _et al._ (forthcoming) for more information.
+The whole dataset is split into five (5) folders, plus additional metadata in CSV format. Read the individual README files within each folder for more details, and see Amézquita _et al._ (forthcoming) for more information.
 
-- `merged`: Collection of summaries in CSV format. These summaries include the volume of all the main tissues of all citrus fruit, ellipsoid semi-axes lengths that model the overal fruit shape, fruit sphericity for all samples, among other measurments.
+- `clean/`: Collection of 8-bit TIFF files containing all the individual walnuts as voxel-based X-ray CT scans. 
+    - These scans are already clean and standardized. 
+    - They have no external air (only the voxels corresponding to air within the walnut cavity report nonzero values). 
+    - All the planes containing exclusively zeros were removed in order to reduce image dimensions.
+    
+- `kernel/`: Collection of CSVs with several phenotypes of the walnut kernel. 
+    - We attempted to compute a rough approximation of the main cavity at the distal end of the kernel. 
+    - We tried to gauge its size, both in terms of surface area and volume, both in absolute and relative terms. 
+    - We emphasize that this is just a rough attempt and a more robust approach should be planned in this direction.
+    
+- `rotated/`: Collection of CSVs with rotation matrices, centering coordinates, and related data for the walnuts. 
+    - Many phenotypes depend on having all the walnuts aligned the same way. 
+    - In this case, we make sure that the X axis corresponds to the proximal-distal axis, with the tip of the walnut on the postive side. 
+    - The seal of the walnut lies on the XZ plane. The seal is parallel to the Y axis while perpendicular to the Z one. 
+    
+- `traditional/`: Collection of 1-row, headless CSVs with several phenotypes of the walnut and its shell, kernel, and packing tissues.
 
-- `oil`: Collection of 8-bit TIFF files containing all the segmented oil glands for each citrus. Additional numbers are extracted related to the oil glands. Based on the oil gland centers, we compute the ellipsoid surface that approximates the best the overall fruit shape. Parameters of this best-fit ellipsoid are provided. See the overview section above for more details.
-
-- `tissue`: Separate 8-bit TIFF files for separate tissues. All images have the same shape as the original whole fruit image. These are central column, endocarp, rind, and exocarp for each fruit. A rotation matrix to align the fruit upright is provided.
-
-- `CRC_citrus_scan_technique.csv`: CSV with resolution of the scans.
-
-- `CRC_citrus_scanned.csv`: Metadata provided by the Walnut Improvement Program at the University of California Davis. 
-
-- `LICENSE`: raw text file with CC0 License details
-
-- `LICENSE_summary`: raw text with CC0 human-readable summary.
+- `all_phenos.csv`: A 721x20 table. Traits measured for breeding purposes. Most traits are measured on an ordinal scale following the criteria established by [(IPGRI, 1994)](https://cgspace.cgiar.org/handle/10568/73159). All these traits were measured on a per-tree basis. The columns are:
+    - `UCACCSD`: identifier of the walnut cultivar according to the Walnut Improvement Program at the University of California Davis.
+    - `YR`: year when walnuts were collected for evaluation of tree fruit traits
+    - `LOCATE`: Location of the tree
+    - `ROW`: Row where the tree is located
+    - `TREE`: Exact tree within the row is located
+    - `PercentKernel`: Percentage of the walnut's weight that corresponds to the kernel.
+    - The rest of columns are IPGRI traits
 
 - `README.md`: This file. Markdown format. Raw text.
+
+- `README_clean.md`: Copy of the README corresponding to the `clean` folder
+
+- `README_kernel.md`: Copy of the README corresponding to the `kernel` folder
+
+- `README_rotated.md`: Copy of the README corresponding to the `rotated` folder
+
+- `README_traditional.md`: Copy of the README corresponding to the `traditional` folder
+
+- `README_watershed.md`: Copy of the README corresponding to the `watershed` folder
+

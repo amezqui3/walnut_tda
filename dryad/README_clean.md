@@ -60,43 +60,30 @@ All plant materials represent walnut breeding lines, germplasm, and cultivars ma
 
 ### File description
 
-The whole dataset is split into five (5) folders, plus additional metadata in CSV format. Read the individual README files within each folder for more details, and see Amézquita _et al._ (forthcoming) for more information.
+Collection of 8-bit TIFF files containing all the individual walnuts as voxel-based X-ray CT scans. These scans are already clean and standardized. They have no external air (only the voxels corresponding to air within the walnut cavity report nonzero values). All the planes containing exclusively zeros were removed in order to reduce image dimensions.
 
-- `clean/`: Collection of 8-bit TIFF files containing all the individual walnuts as voxel-based X-ray CT scans. 
-    - These scans are already clean and standardized. 
-    - They have no external air (only the voxels corresponding to air within the walnut cavity report nonzero values). 
-    - All the planes containing exclusively zeros were removed in order to reduce image dimensions.
-    
-- `kernel/`: Collection of CSVs with several phenotypes of the walnut kernel. 
-    - We attempted to compute a rough approximation of the main cavity at the distal end of the kernel. 
-    - We tried to gauge its size, both in terms of surface area and volume, both in absolute and relative terms. 
-    - We emphasize that this is just a rough attempt and a more robust approach should be planned in this direction.
-    
-- `rotated/`: Collection of CSVs with rotation matrices, centering coordinates, and related data for the walnuts. 
-    - Many phenotypes depend on having all the walnuts aligned the same way. 
-    - In this case, we make sure that the X axis corresponds to the proximal-distal axis, with the tip of the walnut on the postive side. 
-    - The seal of the walnut lies on the XZ plane. The seal is parallel to the Y axis while perpendicular to the Z one. 
-    
-- `traditional/`: Collection of 1-row, headless CSVs with several phenotypes of the walnut and its shell, kernel, and packing tissues.
+The density values for shell, kernel, and interior air are roughly the same across samples. This standarization helps later when separating tissues with a watershed approach. 
 
-- `all_phenos.csv`: A 721x20 table. Traits measured for breeding purposes. Most traits are measured on an ordinal scale following the criteria established by [(IPGRI, 1994)](https://cgspace.cgiar.org/handle/10568/73159). All these traits were measured on a per-tree basis. The columns are:
-    - `UCACCSD`: identifier of the walnut cultivar according to the Walnut Improvement Program at the University of California Davis.
-    - `YR`: year when walnuts were collected for evaluation of tree fruit traits
-    - `LOCATE`: Location of the tree
-    - `ROW`: Row where the tree is located
-    - `TREE`: Exact tree within the row is located
-    - `PercentKernel`: Percentage of the walnut's weight that corresponds to the kernel.
-    - The rest of columns are IPGRI traits
+See the jupyter notebook(s) for more details:
 
-- `README.md`: This file. Markdown format. Raw text.
+```
+- https://github.com/amezqui3/walnut_tda/blob/main/jupyter/01_density_normalization.ipynb
+```
 
-- `README_clean.md`: Copy of the README corresponding to the `clean` folder
+Subdirectories are named as `<Locate>_<Row>_<Tree>` to idenfify individual walnuts from different trees. See the main README file for more details.
 
-- `README_kernel.md`: Copy of the README corresponding to the `kernel` folder
+Inside each subdirectory, individual TIFF files are located, indenfied with suffixes `001`, `002`, etc.
 
-- `README_rotated.md`: Copy of the README corresponding to the `rotated` folder
+Inside each subdirectory, a `normalization` folder is located with additional information for each individual walnut scan.
 
-- `README_traditional.md`: Copy of the README corresponding to the `traditional` folder
+- `clean_zeros.csv`: 6-dimensional vector. This helps slicing the original raw image when removing planes containing exclusively zeros.
 
-- `README_watershed.md`: Copy of the README corresponding to the `watershed` folder
+     `img = img[cero[1]:cero[4], cero[2]:cero[5], cero[0]:cero[3]]`
+     
+- `normalization_coefficients.csv`: 2-dimensional vector `[b,m]`. It is used to recalibrate the intensity values of the voxels of the raw scan 
 
+     `new_density = m * raw_density + b`
+     
+- `walnut_shell.jpg`: 2D projection of the max intensity values of the whole walnut scan. Usually these max intensity voxel corresponds to one in the shell. See main README for more details.
+
+- `whole_walnut.jpg`: 2D projection of the sum of intensity values of the whole walnut scan. See main README for more details.

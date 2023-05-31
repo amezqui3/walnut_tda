@@ -35,6 +35,8 @@ Data collected in December 2019 at Michigan State University. Walnut samples pro
 
 - Amézquita EJ, Quigley M, Brown PJ, Munch E, Chitwood DH "The shape of kernels and cracks, in a nutshell" In preparation at the time of writing this README.
 
+- IPGRI (1994) _Descriptors for Walnut (_Juglans _spp.)_ International Plant Genetic Resources Institute, Rome, Italy. [URL](https://cgspace.cgiar.org/handle/10568/73159)
+
 - [Walnut scripts](https://github.com/amezqui3/walnut_tda)
 
 ### License
@@ -79,14 +81,27 @@ The whole dataset is split into five (5) folders, plus additional metadata in CS
     
 - `traditional/`: Collection of 1-row, headless CSVs with several phenotypes of the walnut and its shell, kernel, and packing tissues.
 
-- `all_phenos.csv`: A 721x20 table. Traits measured for breeding purposes. Most traits are measured on an ordinal scale following the criteria established by [(IPGRI, 1994)](https://cgspace.cgiar.org/handle/10568/73159). All these traits were measured on a per-tree basis. The columns are:
+- `all_phenos.csv`: A 721x20 table. Traits measured for breeding purposes. Most traits are measured on an ordinal scale following the criteria established by [(IPGRI, 1994)](https://cgspace.cgiar.org/handle/10568/73159). All these traits were measured on a per-tree basis by taking 10 different nuts. The columns are:
     - `UCACCSD`: identifier of the walnut cultivar according to the Walnut Improvement Program at the University of California Davis.
     - `YR`: year when walnuts were collected for evaluation of tree fruit traits
     - `LOCATE`: Location of the tree
     - `ROW`: Row where the tree is located
     - `TREE`: Exact tree within the row is located
-    - `PercentKernel`: Percentage of the walnut's weight that corresponds to the kernel.
-    - The rest of columns are IPGRI traits
+    - `Shell Integrity`: Completeness of the shell
+    - `Shell Texture`: Smoothness/roughness of the shell
+    - `Shell Color`: Light or dark
+    - `SEAL`: Open/very weak or very strong shell seal
+    - `Shell Strength`: Paper or strong shell
+    - `Shell thickness`: As measured near center of half shell [mm]
+    - `Packing Tissue`: Thin/sparse or very thick packing tissue
+    - `Kernel fill`: Poor or well filled
+    - `Tip Shrivel`: Percentage of kernels exhibiting tip shrivel
+    - `Minor Shrivel`: Percentage of kernels exhibiting minor shrivel
+    - `Major Shrivel`: Percentage of kernels exhibiting major shrivel
+    - `Plumpness`: Thin or plump kernel
+    - `Ease of removal`: Easiness/difficulty to extract kernel halves
+    - `Percent Kernel`: Percentage of the walnut's weight that corresponds to the kernel.
+    - `Blank`: Percentage of nuts with no kernel
 
 - `README.md`: This file. Markdown format. Raw text.
 

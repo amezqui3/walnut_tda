@@ -68,7 +68,7 @@ See the jupyter notebook(s) for more details:
 
 Subdirectories are named as `<Locate>_<Row>_<Tree>` to idenfify individual walnuts from different trees. See the main README file for more details.
 
-- `_rotation.csv`: 21x3 array with the following information by row. Using python notation, if this CSV is loaded as a numpy array `rdata`, then
+- `_rotation.csv`: 21x3 array with the following information by row. All measurements in milimeters. Using python notation, if this CSV is loaded as a numpy array `rdata`, then
     - `rdata[0]`: X,Y,Z coordinates of the center of mass of the walnut
     - `rdata[1:4]`: Rotation matrix on the X axis so that the seal of the walnut is aligned with the Y axis and perpendicular to the Z one.
     - `rdata[4:7]`: Rotation matrix on the Y axis so that the tip of the walnut is on the X axis

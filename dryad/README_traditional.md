@@ -72,53 +72,53 @@ See the jupyter notebook(s) for more details:
 
 Subdirectories are named as `<Locate>_<Row>_<Tree>` to idenfify individual walnuts from different trees. See the main README file for more details.
 
-- `_kernel.csv`: Single-line, headless CSV with 48 entries.
+- `_trad.csv`: Single-line, headless CSV with 48 entries.
     - UCACCSD identifier. See README file for more details
     - `<Locate>_<Row>_<Tree>` Identifier. See README file for more details.
     - Individual label
-    - Nut Length along the proximal-distal axis
-    - Nut Height along the medial-lateral axis
-    - Nut Width along the adaxial-abaxial axis
-    - Nut Volume
-    - Nut VA3D sphericity index
-    - Nut Feret Ratio
-    - Nut Surface Area
-    - Nut Sphericity, Wadell index 
-    - Surface area of the convex hull of the nut
-    - Volume of the convex hull
-    - Ratio between the surface area of the convex hull and the surface area of the nut
-    - Ratio between the volume of the nut and the volume of its convex hull
-    - Krumbein Index of sphericity
-    - Sneed Index of sphericity
-    - Air Volume
-    - Kernel Volume
-    - Shell Volume
-    - Packing tissue Volume
-    - Air Volume Ratio, how much of the total volume is air
-    - Kernel Volume Ratio, how much of the total volume is kernel
-    - Shell Volume Ratio
-    - Packing tissue Ratio
-    - Shell Rugosity index
-    - Average thickness of the shell across the whole walnut
-    - Protruding Shell Volume Ratio, how much of the total volume of the shell protrudes into the interior of the walnut
-    - Protruding Shell Volume
-    - Kernel Length along the proximal-distal axis
-    - Kernel Height along the medial-lateral axis
-    - Kernel Width along the adaxial-abaxial axis
-    - Kernel Surface Area
-    - Volume of the convex hull of the kernel
-    - Surface area of the convex hull of the kernel
-    - Ratio between the surface area of the convex hull and the surface area of the kernel
-    - Ratio between the volume of the kernel and the volume of its convex hull
-    - Surface area of the main cavity surrounded by the kernel at its distal end.
-    - Volume of the main cavity surrounded by the kernel at its distal end.
-    - Length along the proximal-distal axis of the main arch that connects the two hemispheres of a walnut.
-    - Length along the proximal-distal axis of the main cavity surrounded by the kernel at its distal end.
-    - Wadell's index of sphericity for the kernel
-    - Ratio between the surface area of the main cavity and the surface area of the kernel
-    - Ratio between the volume of the main cavity and the volume of the convex hull of the kernel
+    - Nut Length along the proximal-distal axis [mm]
+    - Nut Height along the medial-lateral axis [mm]
+    - Nut Width along the adaxial-abaxial axis [mm]
+    - Nut Volume [mm^3]
+    - Nut VA3D sphericity index [1 - infinity, where 1 indicates perfect sphericity]
+    - Nut Feret Ratio [same as above]
+    - Nut Surface Area [mm^2]
+    - Nut Sphericity, Wadell index [0 - 1, where 1 indicates perfect sphericity and 0 not spherical at all]
+    - Surface area of the convex hull of the nut [mm^2]
+    - Volume of the convex hull [mm^3]
+    - Ratio between the surface area of the convex hull and the surface area of the nut [0 - 1, where 1 indicates perfect convexity and 0 not convex at all]
+    - Ratio between the volume of the nut and the volume of its convex hull [same as above]
+    - Krumbein Index of sphericity [same as above]
+    - Sneed Index of sphericity [same as above]
+    - Air Volume [mm^3]
+    - Kernel Volume [mm^3]
+    - Shell Volume [mm^3]
+    - Packing tissue Volume [mm^3]
+    - Air Volume Ratio, how much of the total volume is air [%]
+    - Kernel Volume Ratio, how much of the total volume is kernel [%]
+    - Shell Volume Ratio [%]
+    - Packing tissue Volume Ratio [%]
+    - Shell Rugosity index [1 - infinity, where 1 indicates perfect smoothness] 
+    - Average thickness of the shell across the whole walnut [mm]
+    - Protruding Shell Volume Ratio, how much of the total volume of the shell protrudes into the interior of the walnut [%]
+    - Protruding Shell Volume [mm^3]
+    - Kernel Length along the proximal-distal axis [mm]
+    - Kernel Height along the medial-lateral axis [mm]
+    - Kernel Width along the adaxial-abaxial axis [mm]
+    - Kernel Surface Area [mm^2]
+    - Volume of the convex hull of the kernel [mm^3]
+    - Surface area of the convex hull of the kernel [mm^2]
+    - Ratio between the surface area of the convex hull and the surface area of the kernel [0 - 1, where 1 indicates perfect convexity and 0 not convex at all]
+    - Ratio between the volume of the kernel and the volume of its convex hull [0 - 1, where 1 indicates perfect convexity and 0 not convex at all]
+    - Surface area of the main cavity surrounded by the kernel at its distal end [mm^2]
+    - Volume of the main cavity surrounded by the kernel at its distal end [mm^3]
+    - Length along the proximal-distal axis of the main arch that connects the two hemispheres of a walnut [mm]
+    - Length along the proximal-distal axis of the main cavity surrounded by the kernel at its distal end [mm]
+    - Wadell's index of sphericity for the kernel [0 - 1, where 1 indicates perfect sphericity and 0 not convex at all]
+    - Ratio between the surface area of the main cavity and the surface area of the kernel [0 - 1]
+    - Ratio between the volume of the main cavity and the volume of the convex hull of the kernel [0 - 1]
     - Ratio between the average raw density of the kernel and the average raw density of the shell
     - Ratio between the average raw density of the packing tissue and the average raw density of the shell
     - Ratio between the average raw density of the packing tissue and the average raw density of the kernel
-    - Feret ratio of the kernel
+    - Feret ratio of the kernel [1 - infinity, where 1 indicates perfect sphericity]
     

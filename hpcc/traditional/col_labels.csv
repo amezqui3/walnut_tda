@@ -26,7 +26,7 @@ Shell Vol Ratio, [%]
 Packing Vol Ratio, [%]
 Shell Rugosity,
 Shell Thickness, [mm]
-Protruding Shell Vol Ratio, [%]
+Protruding Shell Ratio, [%]
 Protruding Shell Volume, [mm$^3$]
 Kernel Length, [mm]
 Kernel Height, [mm]
@@ -47,18 +47,22 @@ Density Kernel vs Shell, [%]
 Density Packing vs Shell, [%]
 Density Packing vs Kernel, [%]
 Kernel Feret Ratio,
-Shell Integrity, [4 - 7]
-Shell Texture, [3 - 7]
-Shell Color, [3 - 7]
-Seal, [3 - 6]
-Shell Strength, [3 - 8]
+Nut Vol wo Air, [mm$^3$]
+Kernel Vol Ratio wo Air, [%]
+Packing Vol Ratio wo Air,[%]
+Shell Vol Ratio wo Air, [%]
+Shell Integrity,
+Shell Texture,
+Shell Color,
+Shell Seal,
+Shell Strength,
 Shell Thickness,
-Packing Tissue, [4 - 8]
-Kernel Fill, [3 - 8]
+Packing Tissue,
+Kernel Fill,
 Tip Shrivel, [%]
 Minor Shrivel, [%]
 Major Shrivel, [%]
-Plumpness, [3 - 7]
-Ease Of Removal, [3 - 8]
-Percent Kernel, [Weight%]
+Plumpness,
+Ease Of Removal,
+Kernel Weight Ratio, [%]
 Blank, [%]

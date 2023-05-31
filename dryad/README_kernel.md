@@ -73,19 +73,19 @@ Subdirectories are named as `<Locate>_<Row>_<Tree>` to idenfify individual walnu
 - `_kernel.csv`: Single-line, headless CSV with 15 entries.
     - `<Locate>_<Row>_<Tree>` Identifier. See README file for more details.
     - Individual label
-    - Surface area of the kernel
-    - Volume of the kernel
-    - Surface area of the kernel's convex hull
-    - Volume of the convex hull
-    - Krumbein sphericity index
-    - Corey sphericity index
-    - Sneed sphericity index
-    - Janke sphericity index
-    - Equancy sphericity index
-    - Surface area of the main cavity at the distal end
-    - Volume of the main cavity at the distal end
-    - Height of the main arch that connects both hemispheres of the walnut
-    - Height of the main cavity at the distal end
+    - Surface area of the kernel [mm^2]
+    - Volume of the kernel [mm^3]
+    - Surface area of the kernel's convex hull [mm^2]
+    - Volume of the convex hull [mm^3]
+    - Krumbein sphericity index [0 - 1, where 1 indicates perfect sphericity and 0 not spherical at all]
+    - Corey sphericity index [same as above]
+    - Sneed sphericity index [same as above]
+    - Janke sphericity index [same as above]
+    - Equancy sphericity index [same as above]
+    - Surface area of the main cavity at the distal end [mm^2]
+    - Volume of the main cavity at the distal end [mm^3]
+    - Height of the main arch that connects both hemispheres of the walnut [mm]
+    - Height of the main cavity at the distal end [mm]
     
 - `_cavity.jpg`: Visual assessment of the main cavity at the distal end of the kernel. Several 2D slices are take along the proximal-distal axis. The estimated cavity is drawn in red. The largest circle that can fit inside it is drawn in black.
 

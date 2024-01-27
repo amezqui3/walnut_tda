@@ -47,10 +47,10 @@ Density Kernel vs Shell, [%]
 Density Packing vs Shell, [%]
 Density Packing vs Kernel, [%]
 Kernel Feret Ratio,
-Nut Vol wo Air, [mm$^3$]
-Kernel Vol Ratio wo Air, [%]
-Packing Vol Ratio wo Air,[%]
-Shell Vol Ratio wo Air, [%]
+Nut Airless Vol, [mm$^3$]
+Kernel Airless Vol Ratio, [%]
+Packing Airless Vol Ratio, [%]
+Shell Airless Vol Ratio, [%]
 Shell Integrity,
 Shell Texture,
 Shell Color,
